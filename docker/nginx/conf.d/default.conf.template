@@ -1,0 +1,31 @@
+server {
+    listen ${NGINX_PORT} default_server;
+    server_name ${NGINX_SERVER_NAME};
+
+    # Frontend
+    location / {
+        proxy_pass http://leapai-web:3100;
+        include /etc/nginx/proxy.conf;
+    }
+
+    # API requests proxy to backend
+    location /api/ {
+        proxy_pass http://leapai-server:5001/api/;
+        include /etc/nginx/proxy.conf;
+    }
+
+    # OpenAPI requests proxy to backend
+    location /openapi.json {
+        proxy_pass http://leapai-server:5001/openapi.json;
+        include /etc/nginx/proxy.conf;
+    }
+
+    # Image requests proxy to backend
+    location /rag/document/image/ {
+        proxy_pass http://leapai-server:5001/api/rag/document/image/;
+        include /etc/nginx/proxy.conf;
+    }
+}
+
+# HTTPS configuration (if enabled)
+${HTTPS_CONFIG} 

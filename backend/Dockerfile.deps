@@ -1,0 +1,17 @@
+# This builds an image that contains the resources needed by Dockerfile
+FROM python:3.10-slim
+
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /
+
+RUN pip install huggingface-hub nltk
+
+COPY download_deps.py .
+RUN python -u download_deps.py
+
+RUN mkdir -p /nltk_data && \
+    cp -r /.venv/nltk_data/* /nltk_data/

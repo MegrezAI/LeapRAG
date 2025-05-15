@@ -1,0 +1,11 @@
+Dockerfile
+Dockerfile.*
+.dockerignore
+node_modules
+build
+npm-debug.log
+.next
+.git
+.yarn-error.log
+.env
+.env.*

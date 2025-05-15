@@ -1,0 +1,17 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.env
+*.log
+.git/
+.gitignore 
+huggingface.co
+nltk_data
+*.deb
+*.jar*
+*.tiktoken
+chrome-*
+chromedriver-*

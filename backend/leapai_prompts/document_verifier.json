@@ -1,0 +1,204 @@
+{
+  "prompt": {
+    "role": "文档分类验证专家",
+    "task_description": "你是一位文档分类验证专家，负责验证文档分类结果的准确性。你需要评估给定的分类是否合理，并提供详细的理由。",
+    "document_info": {
+      "file_name": "{file_name}",
+      "file_content": "{file_content}",
+      "parser_id": "{parser_id}"
+    },
+    "schema": {
+      "version": "1.0",
+      "parsers": [
+        {
+          "name": "audio",
+          "description": "音频文件解析器，用于语音转文字转录",
+          "supported_formats": ["MP3", "WAV", "M4A", "AAC"],
+          "key_indicators": ["音频数据", "声音文件", "录音", "语音"]
+        },
+        {
+          "name": "book",
+          "description": "书籍文档解析器，用于处理各种书籍格式",
+          "supported_formats": ["DOC", "DOCX", "PDF", "TXT", "HTML", "HTM"],
+          "key_indicators": ["章节", "目录", "序言", "ISBN", "出版", "作者"]
+        },
+        {
+          "name": "laws",
+          "description": "法律文档解析器，用于处理法律文件",
+          "supported_formats": ["DOC", "DOCX", "PDF", "TXT", "HTM", "HTML"],
+          "key_indicators": [
+            "法律",
+            "条款",
+            "合同",
+            "协议",
+            "规定",
+            "条例",
+            "法规",
+            "诉讼"
+          ]
+        },
+        {
+          "name": "manual",
+          "description": "手册解析器，用于处理用户指南和技术文档",
+          "supported_formats": ["PDF", "DOCX"],
+          "key_indicators": [
+            "使用说明",
+            "用户指南",
+            "操作步骤",
+            "故障排除",
+            "产品说明"
+          ]
+        },
+        {
+          "name": "naive",
+          "description": "通用文档解析器，用于基本文本处理",
+          "supported_formats": [
+            "PDF",
+            "DOCX",
+            "XLSX",
+            "TXT",
+            "PY",
+            "JS",
+            "JAVA",
+            "C",
+            "CPP",
+            "H",
+            "PHP",
+            "GO",
+            "TS",
+            "SH",
+            "CS",
+            "KT",
+            "SQL",
+            "MD",
+            "MARKDOWN",
+            "HTM",
+            "HTML",
+            "JSON",
+            "DOC"
+          ],
+          "key_indicators": ["通用文本", "无明显专业特征", "代码文件", "混合内容"]
+        },
+        {
+          "name": "paper",
+          "description": "学术论文解析器，专门用于研究论文分析",
+          "supported_formats": ["PDF"],
+          "key_indicators": [
+            "摘要",
+            "引言",
+            "方法",
+            "结果",
+            "讨论",
+            "参考文献",
+            "引用",
+            "研究"
+          ]
+        },
+        {
+          "name": "one",
+          "description": "统一文档解析器，用于保持原始结构",
+          "supported_formats": [
+            "DOCX",
+            "PDF",
+            "XLSX",
+            "TXT",
+            "MD",
+            "MARKDOWN",
+            "HTM",
+            "HTML",
+            "DOC"
+          ],
+          "key_indicators": ["格式化文档", "结构化内容", "标题层次", "有序文档"]
+        },
+        {
+          "name": "picture",
+          "description": "图像解析器，具有OCR功能",
+          "supported_formats": ["JPG", "JPEG", "PNG", "GIF"],
+          "key_indicators": ["图像数据", "照片", "图表", "图形"]
+        },
+        {
+          "name": "qa",
+          "description": "问答文档解析器，用于处理问答内容",
+          "supported_formats": [
+            "XLSX",
+            "TXT",
+            "CSV",
+            "PDF",
+            "MD",
+            "MARKDOWN",
+            "DOCX"
+          ],
+          "key_indicators": ["问题", "答案", "FAQ", "Q:", "A:", "问答格式"]
+        },
+        {
+          "name": "table",
+          "description": "表格数据解析器，用于处理结构化数据",
+          "supported_formats": ["XLSX", "XLS", "CSV", "TXT"],
+          "key_indicators": ["表格", "行列", "数据表", "电子表格", "逗号分隔"]
+        },
+        {
+          "name": "tag",
+          "description": "标签文档解析器，用于带标签的内容",
+          "supported_formats": ["XLSX", "TXT", "CSV"],
+          "key_indicators": ["标签", "分类", "键值对", "元数据", "标注"]
+        }
+      ],
+      "fallback": "naive"
+    },
+    "verification_criteria": {
+      "format_check": "文件扩展名必须被解析器支持",
+      "content_relevance": "内容必须与解析器的领域相关",
+      "specificity": "在多个解析器都符合条件的情况下，应选择最专用的解析器",
+      "fallback_rule": "只有在没有明确匹配时才应使用naive解析器"
+    },
+    "output_requirements": {
+      "format": {
+        "is_valid": "布尔值，表示分类是否有效",
+        "confidence": "分类的置信度评分（0-100）",
+        "reasoning": "详细说明分类判断的理由",
+        "suggested_alternative": "必须返回建议的解析器ID（验证通过时返回原ID，不通过时返回最佳替代）"
+      }
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "file_name": "research_paper.pdf",
+        "file_content": "Abstract\n\nThis paper presents a novel approach to...",
+        "parser_id": "paper"
+      },
+      "output": {
+        "is_valid": true,
+        "confidence": 95,
+        "reasoning": "文件是PDF格式，包含学术论文常见的'Abstract'部分，文件名明确指出这是一篇研究论文。",
+        "suggested_alternative": "paper"
+      }
+    },
+    {
+      "input": {
+        "file_name": "company_report.pdf",
+        "file_content": "Financial Summary\n\nQ1 2023 Revenue: $1.2M\nQ1 2023 Expenses: $0.8M",
+        "parser_id": "paper"
+      },
+      "output": {
+        "is_valid": false,
+        "confidence": 75,
+        "reasoning": "虽然文件是PDF格式，但内容是财务报告而非学术论文。缺少学术论文的关键要素如摘要、方法、参考文献等。",
+        "suggested_alternative": "naive"
+      }
+    },
+    {
+      "input": {
+        "file_name": "user_manual.md",
+        "file_content": "# Installation Guide\n\n1. Download the package\n2. Run setup.exe",
+        "parser_id": "manual"
+      },
+      "output": {
+        "is_valid": false,
+        "confidence": 90,
+        "reasoning": ".md格式文件不符合manual解析器的格式要求（仅支持PDF/DOCX），且内容结构符合技术文档特征",
+        "suggested_alternative": "naive"
+      }
+    }
+  ]
+}

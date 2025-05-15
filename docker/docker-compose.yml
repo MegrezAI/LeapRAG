@@ -1,0 +1,116 @@
+include:
+  - docker-compose-base.yml
+
+services:
+  leapai-web:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: leapai-web
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - SERVICE_API_URL_BASE=${SERVICE_API_URL_BASE}
+    networks:
+      - leapai_network
+    restart: unless-stopped
+
+  leapai-server:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: leapai-server
+    volumes:
+      - leapai-server_data:/data
+      - ../logs:/logs
+      - ../backend/entrypoint.sh:/app/entrypoint.sh
+    env_file: .env
+    environment:
+      - TZ=${TIMEZONE:-Asia/Shanghai}
+      - HF_ENDPOINT=${HF_ENDPOINT:-}
+      - MACOS=${MACOS:-false}
+      - SQLALCHEMY_DATABASE_URI=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-leapai}
+      - DEBUG=${DEBUG:-false}
+      - SECRET_KEY=${SECRET_KEY:-leapai}
+      - STORAGE_TYPE=${STORAGE_TYPE:-minio}
+      - MINIO_USER=${MINIO_USER:-leapai}
+      - MINIO_PASSWORD=${MINIO_PASSWORD:-leapai_minio}
+      - MINIO_BUCKET=${MINIO_BUCKET:-leapai}
+      - DOC_ENGINE=${DOC_ENGINE:-elasticsearch}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-leapai}
+      - ES_HOSTS=${ES_HOSTS:-http://es01:9200}
+      - ES_USERNAME=${ES_USERNAME:-elastic}
+      - ES_PASSWORD=${ELASTIC_PASSWORD:-leapai}
+      - SERVICE_HTTP_PORT=${SERVICE_HTTP_PORT:-5001}
+      - SERVICE_API_URL_BASE=${SERVICE_API_URL_BASE:-http://localhost:5001/api}
+      - MINIO_HOST=minio
+      - MINIO_PORT=9000
+      - ES_HOST=es01
+      - ES_PORT=9200
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_CONSOLE_PORT=9001
+
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      es01:
+        condition: service_healthy
+    networks:
+      - leapai_network
+    restart: on-failure
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template
+      - ./nginx/proxy.conf.template:/etc/nginx/proxy.conf.template
+      - ./nginx/https.conf.template:/etc/nginx/https.conf.template
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/docker-entrypoint.sh:/docker-entrypoint-mount.sh
+      - ./nginx/ssl:/etc/ssl
+    entrypoint:
+      [
+        'sh',
+        '-c',
+        "cp /docker-entrypoint-mount.sh /docker-entrypoint.sh && sed -i 's/\r$$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh",
+      ]
+    environment:
+      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:-_}
+      NGINX_HTTPS_ENABLED: ${NGINX_HTTPS_ENABLED:-false}
+      NGINX_SSL_PORT: ${NGINX_SSL_PORT:-443}
+      NGINX_PORT: ${NGINX_PORT:-80}
+      NGINX_SSL_CERT_FILENAME: ${NGINX_SSL_CERT_FILENAME:-leapai.crt}
+      NGINX_SSL_CERT_KEY_FILENAME: ${NGINX_SSL_CERT_KEY_FILENAME:-leapai.key}
+      NGINX_SSL_PROTOCOLS: ${NGINX_SSL_PROTOCOLS:-TLSv1.1 TLSv1.2 TLSv1.3}
+      NGINX_WORKER_PROCESSES: ${NGINX_WORKER_PROCESSES:-auto}
+      NGINX_CLIENT_MAX_BODY_SIZE: ${NGINX_CLIENT_MAX_BODY_SIZE:-15M}
+      NGINX_KEEPALIVE_TIMEOUT: ${NGINX_KEEPALIVE_TIMEOUT:-65}
+      NGINX_PROXY_READ_TIMEOUT: ${NGINX_PROXY_READ_TIMEOUT:-3600s}
+      NGINX_PROXY_SEND_TIMEOUT: ${NGINX_PROXY_SEND_TIMEOUT:-3600s}
+    depends_on:
+      - leapai-web
+      - leapai-server
+    ports:
+      - '${EXPOSE_NGINX_PORT:-3100}:${NGINX_PORT:-80}'
+      - '${EXPOSE_NGINX_SSL_PORT:-8443}:${NGINX_SSL_PORT:-443}'
+    networks:
+      - leapai_network
+
+networks:
+  leapai_network:
+    driver: bridge
+
+volumes:
+  leapai-server_data:
+    driver: local
