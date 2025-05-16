@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a454ee3c-e6da-4129-8922-db0179e04cf4" alt="LeapRAGAgent Logo" />
+  <img src="https://github.com/user-attachments/assets/a9a7271b-677a-4463-afd0-9d3c58053453" alt="LeapRAGAgent Logo" />
 </p>
 
 <h1 align="center">LeapRAG</h1>
