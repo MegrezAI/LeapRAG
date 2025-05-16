@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a454ee3c-e6da-4129-8922-db0179e04cf4" alt="LeapRAGAgent Logo" />
+  <img src="https://github.com/user-attachments/assets/a9a7271b-677a-4463-afd0-9d3c58053453" alt="LeapRAGAgent Logo" />
 </p>
 
 <h1 align="center">LeapRAG</h1>
@@ -32,7 +32,7 @@ LeapRAG 是一个开源平台，结合了最先进的检索增强生成（RAG）
 
 **注意：** 视频中的敏感信息已进行脱敏处理。
 
-https://github.com/user-attachments/assets/1b3bd34a-a19a-4d18-99c5-fe20edf2310e
+https://github.com/user-attachments/assets/69755681-e8a7-4283-ae70-834b209e2721
 
 ## 功能特性
 
