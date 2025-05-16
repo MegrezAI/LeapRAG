@@ -246,6 +246,7 @@ By correctly configuring the custom agent URL, your agent will be discoverable a
 ## Community & Contact
 
 - GitHub Issues: Report bugs and feature suggestions
+- Email: support@leaprag.com
 
 ## Acknowledgements
 

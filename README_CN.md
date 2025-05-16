@@ -246,6 +246,7 @@ docker compose up -d
 ## 社区与联系
 
 - GitHub Issues：报告 bug 和功能建议
+- Email: support@leaprag.com
 
 ## 致谢
 
