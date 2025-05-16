@@ -216,19 +216,12 @@ cp .env.example.production .env
 docker compose up -d
 ```
 
-### Check Service Status
-
-After configuration, you can check the service status using the following commands:
-
-```bash
-docker ps
-docker logs -f leapai-nginx
-```
-
 After successful configuration, you should be able to access LeapRAG through:
 
 - HTTP mode: `http://your-domain.com`
 - HTTPS mode: `https://your-domain.com`
+
+### Configure Agent Public Network Access
 
 After completing the Nginx configuration and confirming that the service is running normally, you need to configure the public network access address for your agent so that other A2A clients can discover and access it:
 

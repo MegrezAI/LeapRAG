@@ -216,15 +216,6 @@ cp .env.example.production .env
 docker compose up -d
 ```
 
-### 检查服务状态
-
-配置完成后，您可以使用以下命令检查服务状态：
-
-```bash
-docker ps
-docker logs -f leapai-nginx
-```
-
 成功配置后，您应该能够通过以下方式访问 LeapRAG：
 
 - HTTP 模式：`http://your-domain.com`
