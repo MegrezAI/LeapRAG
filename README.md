@@ -32,7 +32,7 @@ This video demonstrates the complete workflow of LeapRAG, including:
 
 **Note:** Sensitive information in the video has been redacted.
 
-https://github.com/user-attachments/assets/1b3bd34a-a19a-4d18-99c5-fe20edf2310e
+https://github.com/user-attachments/assets/69755681-e8a7-4283-ae70-834b209e2721
 
 ## Key Features
 
