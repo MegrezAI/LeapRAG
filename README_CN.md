@@ -85,7 +85,8 @@ https://github.com/user-attachments/assets/69755681-e8a7-4283-ae70-834b209e2721
 > 在安装 LeapRAG 之前，请确保您的机器满足以下最低系统要求：
 >
 > - CPU >= 2 核
-> - RAM >= 4 GiB
+> - RAM >= 8 GB
+> - Disk >= 50 GB
 
 </br>
 
