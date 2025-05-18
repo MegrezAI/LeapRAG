@@ -76,12 +76,12 @@ COPY pyproject.toml poetry.lock ./
 COPY poetry.toml ./
 
 
-RUN --mount=type=bind,from=leapai-deps,source=/huggingface.co,target=/huggingface.co \
+RUN --mount=type=bind,from=megrezai/leapai-deps,source=/huggingface.co,target=/huggingface.co \
     cp -r /huggingface.co /app/
-RUN --mount=type=bind,from=leapai-deps,source=/nltk_data,target=/nltk_data \
+RUN --mount=type=bind,from=megrezai/leapai-deps,source=/nltk_data,target=/nltk_data \
     mkdir -p /app/nltk_data && \
     cp -r /nltk_data/* /app/nltk_data/
-RUN --mount=type=bind,from=leapai-deps,source=/,target=/deps \
+RUN --mount=type=bind,from=megrezai/leapai-deps,source=/,target=/deps \
     cp /deps/*.deb /deps/*.jar* /deps/chrome-* /deps/chromedriver-* /app/ && \
     cp /deps/cl100k_base.tiktoken /app/9b5ad71b2ce5302211f9c61530b329a4922fc6a4
 
