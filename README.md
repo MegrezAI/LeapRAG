@@ -95,7 +95,7 @@ The easiest way to start the LeapRAG server is through [docker compose](docker/d
 # Clone the repository
 git clone https://github.com/megrezAI/LeapRAG.git
 cd LeapRAG/docker
-cp .env.example .env
+cp .env.example.production .env
 docker compose up -d
 ```
 

@@ -95,7 +95,7 @@ https://github.com/user-attachments/assets/69755681-e8a7-4283-ae70-834b209e2721
 # 克隆仓库
 git clone https://github.com/megrezAI/LeapRAG.git
 cd LeapRAG/docker
-cp .env.example .env
+cp .env.example.production .env
 docker compose up -d
 ```
 
