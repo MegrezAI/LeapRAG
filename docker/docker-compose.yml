@@ -3,9 +3,7 @@ include:
 
 services:
   leapai-web:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: megrezai/leapai-web:latest
     container_name: leapai-web
     env_file: .env
     environment:
@@ -16,10 +14,7 @@ services:
     restart: unless-stopped
 
   leapai-server:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-      target: production
+    image: megrezai/leapai-server:latest
     container_name: leapai-server
     volumes:
       - leapai-server_data:/data
