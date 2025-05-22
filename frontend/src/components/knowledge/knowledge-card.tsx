@@ -64,7 +64,7 @@ export default function KnowledgeBaseCard({
                 <Book className="size-4" />
               </AvatarFallback>
             </Avatar>
-            <p className="text-lg font-medium">{name}</p>
+            <p className="text-lg font-medium truncate w-[200px]">{name}</p>
           </div>
           <DropdownMenuButton
             items={menuItems}

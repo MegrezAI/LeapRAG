@@ -135,7 +135,7 @@ export default function AgentCard({
                 <Bot className="size-full" />
               )}
             </div>
-            <p className="text-lg font-medium">{name}</p>
+            <p className="text-lg font-medium truncate w-[200px]">{name}</p>
           </div>
           <DropdownMenuButton items={menuItems} buttonProps={{ size: 'icon' }} />
         </CardHeader>
