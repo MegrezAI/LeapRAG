@@ -127,15 +127,17 @@ export default function AgentCard({
     <>
       <Card className="flex flex-col cursor-pointer hover:shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <div className="flex items-center space-x-2">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+          <div className="flex items-center space-x-2 flex-1 min-w-0">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg flex-shrink-0">
               {icon ? (
                 <img src={icon} alt={name} className="size-full rounded-md object-cover" />
               ) : (
                 <Bot className="size-full" />
               )}
             </div>
-            <p className="text-lg font-medium truncate w-[200px]">{name}</p>
+            <p className="text-lg font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+              {name}
+            </p>
           </div>
           <DropdownMenuButton items={menuItems} buttonProps={{ size: 'icon' }} />
         </CardHeader>

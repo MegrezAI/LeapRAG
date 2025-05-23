@@ -57,14 +57,16 @@ export default function KnowledgeBaseCard({
     <>
       <Card className="flex flex-col cursor-pointer hover:shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <div className="flex items-center space-x-2">
-            <Avatar className="size-8 rounded-md">
+          <div className="flex items-center space-x-2 flex-1 min-w-0">
+            <Avatar className="size-8 rounded-md flex-shrink-0">
               <AvatarImage src={avatar} />
               <AvatarFallback className="rounded-md bg-primary/10">
                 <Book className="size-4" />
               </AvatarFallback>
             </Avatar>
-            <p className="text-lg font-medium truncate w-[200px]">{name}</p>
+            <p className="text-lg font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+              {name}
+            </p>
           </div>
           <DropdownMenuButton
             items={menuItems}
