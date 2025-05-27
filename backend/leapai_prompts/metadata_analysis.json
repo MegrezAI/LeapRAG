@@ -8,11 +8,19 @@
     },
     "schema": {
       "version": "2.0",
-      "required_keys": ["标题", "作者", "日期", "摘要", "关键词", "领域", "文章类型"]
+      "required_keys": [
+        "title",
+        "author",
+        "date",
+        "abstract",
+        "keywords",
+        "domain",
+        "article_type"
+      ]
     },
     "parsing_strategies": [
       {
-        "key": "标题",
+        "key": "title",
         "extraction_methods": [
           "提取文章中的第一个标题",
           "分析文章首行",
@@ -20,7 +28,7 @@
         ]
       },
       {
-        "key": "作者",
+        "key": "author",
         "extraction_methods": [
           "识别文章中的作者标识",
           "检测署名行",
@@ -28,7 +36,7 @@
         ]
       },
       {
-        "key": "日期",
+        "key": "date",
         "extraction_methods": [
           "识别标准日期格式",
           "提取文章中的年份",
@@ -36,7 +44,7 @@
         ]
       },
       {
-        "key": "摘要",
+        "key": "abstract",
         "extraction_methods": [
           "查找显式摘要段落",
           "提取文章第一段",
@@ -44,7 +52,7 @@
         ]
       },
       {
-        "key": "关键词",
+        "key": "keywords",
         "extraction_methods": [
           "词频分析",
           "识别文章中的关键短语",
@@ -52,11 +60,11 @@
         ]
       },
       {
-        "key": "领域",
+        "key": "domain",
         "extraction_methods": ["文章主题分类", "识别专业术语", "分析文章语境"]
       },
       {
-        "key": "文章类型",
+        "key": "article_type",
         "extraction_methods": ["文章结构分析", "内容风格识别", "文章目的判断"]
       }
     ],
@@ -117,13 +125,13 @@
         "file_content": "黑山令\n\n第一卷 天下风云出我辈\n\n第1章 张定天\n\n...",
         "output": {
           "metadata": {
-            "标题": "黑山令",
-            "作者": null,
-            "日期": null,
-            "摘要": null,
-            "关键词": null,
-            "领域": null,
-            "文章类型": "小说"
+            "title": "黑山令",
+            "author": null,
+            "date": null,
+            "abstract": null,
+            "keywords": null,
+            "domain": null,
+            "article_type": "小说"
           },
           "chapter_regex": {
             "pattern": "^(第)?\\s*(\\d+|[一二三四五六七八九十百])\\s*(卷|章|节)\\s*(.+)?$",
@@ -135,13 +143,13 @@
         "file_content": "Docling Technical Report \n1 Introduction Converting PDF documents \n 2 Getting Started \n To use Docling..., 2.1 AI models \n ...",
         "output": {
           "metadata": {
-            "标题": "Docling Technical Report",
-            "作者": null,
-            "日期": null,
-            "摘要": null,
-            "关键词": null,
-            "领域": null,
-            "文章类型": "技术报告"
+            "title": "Docling Technical Report",
+            "author": null,
+            "date": null,
+            "abstract": null,
+            "keywords": null,
+            "domain": null,
+            "article_type": "技术报告"
           },
           "chapter_regex": {
             "pattern": "^\\s*(?:(?:Chapter\\s+(?:\\d+|[IVXLCDM]+))|(?:\\d+(?:\\.\\d+)?)|(?:[A-Z]\\.))[\\s:.-]+(.+?)\\s*$",
@@ -157,13 +165,13 @@
         "file_content": "1. 绪论\n1.1 研究背景\n1.2 研究意义\n2. 方法\n2.1 实验设计\n...",
         "output": {
           "metadata": {
-            "标题": null,
-            "作者": null,
-            "日期": null,
-            "摘要": null,
-            "关键词": null,
-            "领域": "学术",
-            "文章类型": "论文"
+            "title": null,
+            "author": null,
+            "date": null,
+            "abstract": null,
+            "keywords": null,
+            "domain": "学术",
+            "article_type": "论文"
           },
           "chapter_regex": {
             "pattern": "^(\\d+\\.|\\d+\\.\\d+|\\d+\\s*\\.)?\\s*(.+)$",
@@ -181,13 +189,13 @@
         "file_content": "美股中概股爆发！中国资产，集体大涨 证券时报e公司 2025-03-27 23:36发布于广东证券时报旗下《e公司》官方账号.今晚，中概股又爆发了！ 美股今晚在低开的情况下震荡翻红，而中国资产、黄金均直线暴涨，究其原因，还是对美国总统特朗普关税政策不确定性影响的消化。\n\n...",
         "output": {
           "metadata": {
-            "标题": "美股中概股爆发！中国资产，集体大涨",
-            "作者": "证券时报e公司",
-            "日期": "2025-03-27",
-            "摘要": "今晚，中概股又爆发了！美股今晚在低开的情况下震荡翻红，而中国资产、黄金均直线暴涨，究其原因，还是对美国总统特朗普关税政策不确定性影响的消化。",
-            "关键词": ["中概股", "特朗普", "关税"],
-            "领域": "金融",
-            "文章类型": "新闻报道"
+            "title": "美股中概股爆发！中国资产，集体大涨",
+            "author": "证券时报e公司",
+            "date": "2025-03-27",
+            "abstract": "今晚，中概股又爆发了！美股今晚在低开的情况下震荡翻红，而中国资产、黄金均直线暴涨，究其原因，还是对美国总统特朗普关税政策不确定性影响的消化。",
+            "keywords": ["中概股", "特朗普", "关税"],
+            "domain": "金融",
+            "article_type": "新闻报道"
           },
           "chapter_regex": null
         }
