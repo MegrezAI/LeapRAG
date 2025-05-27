@@ -19,7 +19,7 @@ from services.dialog_service import DialogService
 from services.knowledgebase_service import KnowledgebaseService
 from services.llm_service import TenantLLMService
 from services.service_error_code import ServiceErrorCode
-from models import Agent, transactional, Dialog, APIKey
+from models import Agent, transactional, Dialog, APIToken
 from services.utils import get_uuid
 
 agent_rt = APIRouter(prefix="/rag")
@@ -228,7 +228,7 @@ class AgentRoute:
 
         if agent and agent.tenant_id == tenant_id:
             await DialogService.filter_delete([Dialog.agent_id == agent_id])
-            await APIKeyService.filter_delete([APIKey.agent_id == agent_id])
+            await APIKeyService.filter_delete([APIToken.agent_id == agent_id])
             await AgentService.delete_by_id(agent_id)
             return {"result": "success"}
         else:

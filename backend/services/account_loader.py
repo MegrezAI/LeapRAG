@@ -1,15 +1,15 @@
 from datetime import UTC, datetime, timedelta
-from typing import Any, Optional, cast
 from sqlalchemy import select
 
-from models import get_current_session
+from models import get_current_session, APIToken
 from libs.base_error import BusinessError
 from services.service_error_code import ServiceErrorCode
 from models import transactional
 from models.account import (
     Account,
     AccountStatus,
-    TenantAccountJoin, Tenant,
+    TenantAccountJoin,
+    TenantAccountJoinRole,
 )
 
 
@@ -47,3 +47,28 @@ class AccountLoader:
             account.last_active_at = datetime.now(UTC).replace(tzinfo=None)
 
         return account
+
+    @staticmethod
+    @transactional
+    async def load_api_token(apikey: str) -> None | APIToken:
+        session = get_current_session()
+        result = await session.execute(select(APIToken).filter_by(apikey=apikey))
+        token = result.scalars().first()
+        if not token:
+            return None
+
+        value = token.to_dict()
+        token = APIToken(**value)
+        return token
+
+    @staticmethod
+    @transactional
+    async def load_user_id(tenant_id: str) -> None | str:
+        session = get_current_session()
+        result = await session.execute(
+            select(TenantAccountJoin).filter_by(tenant_id=tenant_id, role=TenantAccountJoinRole.OWNER.value))
+        value = result.scalars().first()
+        if not value:
+            return None
+
+        return value.account_id

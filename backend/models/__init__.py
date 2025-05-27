@@ -37,7 +37,7 @@ from .knowledgebase import (
 )
 
 from .api_key import (
-    APIKey,
+    APIToken,
     API4Conversation,
 )
 
@@ -78,7 +78,7 @@ __all__ = [
     'Document',
     'File',
     'File2Document',
-    'APIKey',
+    'APIToken',
     'API4Conversation'
 ]
 

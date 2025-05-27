@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from starlette import status
 from itsdangerous import URLSafeTimedSerializer
 from extensions.ext_login import login_manager
-from models import Account, transactional, APIKey
+from models import Account, transactional, APIToken
 from services.account_loader import AccountLoader
 from services.account_service import RegisterService, AccountService, TenantService
 from libs.base_error import BusinessError
@@ -196,7 +196,7 @@ class AccountRoute:
         if not tenant:
             raise BusinessError(error_code=ServiceErrorCode.ARGUMENT_ERROR, description="Tenant not found!")
 
-        t = APIKey()
+        t = APIToken()
         t.tenant_id = tenant_id
         t.agent_id = data.agent_id
         serializer = URLSafeTimedSerializer(tenant_id)
@@ -251,7 +251,7 @@ class AccountRoute:
         t = await APIKeyService.get_or_none(tenant_id=tenant_id, apikey=apikey)
         if t is None:
             return 0
-        return await APIKeyService.filter_delete([APIKey.tenant_id == tenant_id, APIKey.apikey == apikey])
+        return await APIKeyService.filter_delete([APIToken.tenant_id == tenant_id, APIToken.apikey == apikey])
 
     @account_rt.post("/account/username")
     @transactional

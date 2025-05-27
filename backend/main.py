@@ -5,6 +5,7 @@ import threading
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
+from starlette.middleware.base import _StreamingResponse
 from starlette.responses import JSONResponse
 from app_factory import create_app
 import uvicorn
@@ -27,10 +28,10 @@ print_rag_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if app_config.DEBUG:
-        logging.warning(f"starting tasks in DEBUG mode")
-        asyncio.create_task(asyncio_periodic_progress())
-        asyncio.create_task(asyncio_periodic_task())
+    logging.warning(f"starting tasks in DEBUG:{app_config.DEBUG}")
+    # if app_config.DEBUG:
+    #     asyncio.create_task(asyncio_periodic_progress())
+    #     asyncio.create_task(asyncio_periodic_task())
     yield
 
 
@@ -53,7 +54,7 @@ async def asyncio_periodic_task():
 async def asyncio_periodic_progress():
     while True:
         await update_doc_progress()
-        await asyncio.sleep(3)
+        await asyncio.sleep(1)
 
 
 app = create_app(lifespan=lifespan)
@@ -68,13 +69,31 @@ app.add_middleware(
 
 @app.middleware("http")
 async def db_session_middleware_function(request: Request,
-                                         call_next: Callable[[Request], Awaitable[Response]]) -> Response | None:
+                                         call_next: Callable[[Request], Awaitable[Response]]) -> Response:
+    session_id = get_uuid()
+    set_db_session_context(session_id=session_id)
     try:
-        set_db_session_context(session_id=get_uuid())
         response = await call_next(request)
-    finally:
-        await AsyncScopedSession.remove()  # this includes closing the session as well
+        if isinstance(response, _StreamingResponse):
+            original_iterator = response.body_iterator
+
+            async def wrapped_iterator():
+                try:
+                    async for chunk in original_iterator:
+                        yield chunk
+                finally:
+                    await AsyncScopedSession.remove()
+                    set_db_session_context(session_id=None)
+
+            response.body_iterator = wrapped_iterator()
+        else:
+            await AsyncScopedSession.remove()
+            set_db_session_context(session_id=None)
+
+    except Exception as e:
+        await AsyncScopedSession.remove()
         set_db_session_context(session_id=None)
+        raise e
 
     return response
 
@@ -88,11 +107,9 @@ async def business_exception_handler(request: Request, e: BusinessError):
                         content=content)
 
 
+@with_async_session
 async def init_llm_factory():
-    set_db_session_context(session_id=get_uuid())
     await LLMFactoryService.init_llm_factory()
-    await AsyncScopedSession.remove()  # this includes closing the session as well
-    set_db_session_context(session_id=None)
 
 
 if __name__ == '__main__':
@@ -111,4 +128,4 @@ if __name__ == '__main__':
     background_thread.daemon = True
     background_thread.start()
 
-    uvicorn.run(app='main:app', host="0.0.0.0", port=app_config.SERVICE_HTTP_PORT, reload=True)
+    uvicorn.run(app='main:app', host="0.0.0.0", port=app_config.SERVICE_HTTP_PORT, reload=app_config.DEBUG)

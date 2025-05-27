@@ -6,7 +6,7 @@ from .types import StringUUID
 from datetime import datetime
 
 
-class APIKey(Base, DictMixin):
+class APIToken(Base, DictMixin):
     __tablename__ = "api_tokens"
 
     tenant_id: Mapped[str] = mapped_column(StringUUID, nullable=False, primary_key=True)

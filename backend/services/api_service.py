@@ -1,11 +1,11 @@
 from datetime import datetime, UTC
 from sqlalchemy import update
-from models import get_current_session, API4Conversation, APIKey, transactional
+from models import get_current_session, API4Conversation, APIToken, transactional
 from services.common_service import CommonService
 
 
 class APIKeyService(CommonService):
-    model = APIKey
+    model = APIToken
 
     @classmethod
     @transactional
